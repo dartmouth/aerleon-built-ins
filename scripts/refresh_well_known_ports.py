@@ -81,6 +81,11 @@ def main():
         result['HTTP_ALT'] = result['HTTP_ALT_8080']
         del result['HTTP_ALT_8080']
         result['HTTP_ALT_ALL'] = sorted([entry if entry['name'] != 'HTTP_ALT_8080' else {'name': 'HTTP_ALT'} for entry in result['HTTP_ALT_ALL']], key=lambda x: x['name'])
+    if 'TRACEROUTE' in result:
+        # The official traceroute port is tcp/udp 33434,
+        # but common UDP implementations use additional UDP ports - 33434 and higher
+        # https://superuser.com/questions/355486/what-is-the-range-of-ports-that-is-usually-used-in-the-traceroute-command
+        result['TRACEROUTE'].append({'port': "33434-33625", 'protocol': 'udp', 'comment': 'common UDP traceroute ports'})
 
     result = yaml.safe_dump({'services': result})
     print(f'''
