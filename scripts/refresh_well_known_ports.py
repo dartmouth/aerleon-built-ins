@@ -22,7 +22,7 @@ def main():
         web_csv = f.read().decode('utf-8')
     # with open('./service-names-port-numbers.csv') as f:
     #     web_csv = f.read()
-    dialect = csv.Sniffer().sniff(web_csv[0:1024])
+    dialect = csv.Sniffer().sniff(web_csv[:10_000])
     reader = csv.reader(StringIO(web_csv), dialect=dialect)
 
     well_known_ports = defaultdict(set)
