@@ -70,6 +70,7 @@ def main():
                 sub_label = f'{label}_{port}'
                 result[sub_label] = [{'port': port, 'protocol': proto} for port, proto in sorted(values)]
                 result[label].append({'name': sub_label})
+            result[label].sort(key=lambda x: x['name'])
         else:
             result[label] = [{'port': port, 'protocol': proto} for port, proto in sorted(values)]
     
@@ -79,7 +80,7 @@ def main():
         result['HTTP_ALT_ALL'] = result['HTTP_ALT']
         result['HTTP_ALT'] = result['HTTP_ALT_8080']
         del result['HTTP_ALT_8080']
-        result['HTTP_ALT_ALL'] = [entry if entry['name'] != 'HTTP_ALT_8080' else {'name': 'HTTP_ALT'} for entry in result['HTTP_ALT_ALL']]
+        result['HTTP_ALT_ALL'] = sorted([entry if entry['name'] != 'HTTP_ALT_8080' else {'name': 'HTTP_ALT'} for entry in result['HTTP_ALT_ALL']], key=lambda x: x['name'])
 
     result = yaml.safe_dump({'services': result})
     print(f'''
